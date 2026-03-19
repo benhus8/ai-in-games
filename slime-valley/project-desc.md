@@ -1,0 +1,16 @@
+Założenia
+Tworzymy prostą grę, w której gracz konkuruje z botami (agentami) sterowanymi sztuczną inteligencją. Ich sterowanie może mieć postać reguł, sieci neuronowej, lub inny. Zadaniem sterowania jest przełożenie informacji wejściowych (o środowisku otaczającym bota) na jego akcje (np. ruchy). Implementujemy zasady gry pozwalające przypisywać kary i nagrody za zachowanie botów oraz ich konfrontację ze sobą i z ludzkim graczem. Porównujemy trzy podejścia do wytworzenia logiki botów. W dwóch pierwszych nie implementujemy jej samodzielnie – chcemy, żeby wytworzyła się sama:
+
+Używamy algorytmów optymalizacji, by wytworzyć logikę zachowania botów (która jest tu rozwiązaniem).
+Używamy algorytmów uczenia (maszynowego lub ze wzmocnieniem), by wytworzyć logikę zachowania botów (która jest tu modelem UM/UZW).
+Implementujemy "ręcznie" heurystyczne reguły logiki botów.
+Ta część laboratoriów składa się z pięciu elementów:
+
+Wybór prostej gry i implementacja jej reguł pozwalająca na ilościową, jednokryterialną ocenę wszelkich zachowań graczy (każde zachowanie oceniane jedną liczbą). Ocena ta jest albo wyznaczana zupełnie niezależnie dla danego bota (jest bezwzględna), albo wynika z interakcji z innymi równocześnie grającymi botami (jest względna).
+Zamiast samemu implementować mechanikę gry, można skorzystać z gier z otwartym kodem źródłowym albo z serwerów gier udostępniających API/protokół komunikacji do sterowania graczami/botami.
+Wykorzystanie optymalizacji do wytworzenia logiki botów (poznanymi wcześniej metodami, np. Gaussian process, DE, CMA-ES).
+Wykorzystanie uczenia (maszynowego lub ze wzmocnieniem) do wytworzenia logiki botów (w UM zbiór przykładów to stan środowiska oraz zachowanie bota: dobre oraz złe).
+Implementacja heurystycznego zachowania botów.
+Porównanie skuteczności i pracochłonności trzech powyższych podejść.
+Przykład gry
+Celem jest jak najszybsze przemieszczenie się gracza (lub bota) z obszaru A do obszaru B unikając kolizji z innymi graczami/botami i z przeszkodami. Wyrusza równocześnie N botów z obszaru A (docelowo w grze biorą też udział ludzcy gracze, dla których boty są przeciwnikami). Obszary i graczy dla prostoty wykrywania kolizji można traktować jako koła (dla gry 2D) lub kule (dla gry 3D). Kary za kolizje powinny być inspirowane zasadami panującymi w rzeczywistości dla transportu na lądzie (zasady samochodowe), na wodzie (W1, W2) lub w powietrzu (P1, P2, P3). Wystarczające jest zaimplementowanie jednego rodzaju botów (czyli wszyscy są równi), zatem nie trzeba rozdrabniać się na różnice w karach za kolizje między rowerami i samochodami, żaglówkami i motorówkami, czy tez balonami, awionetkami i samolotami. Bot musi jednak mieć możliwość wykrywania innych botów i przeszkód oraz świadomość kierunku do celu – to są wejścia do jego logiki ("sensory" lub "atrybuty warunkowe"), i dzięki temu logika jego zachowania może być sensowna. Z kolei wyjścia logiki ("efektory" lub "atrybuty decyzyjne") to akcje agenta (skręcanie, przyspieszanie/hamowanie itp.).
