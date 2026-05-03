@@ -16,6 +16,12 @@ def parse_args():
         default="human",
         help="Choose who controls the right slime.",
     )
+    parser.add_argument(
+        "--opponent",
+        choices=["default", "heuristic", "rl", "opt"],
+        default="default",
+        help="Choose who controls the left slime (opponent).",
+    )
     return parser.parse_args()
 
 
@@ -59,6 +65,13 @@ elif args.agent == "opt":
     agent = OptimizedPolicy()
 else:
     agent = None
+
+if args.opponent == "heuristic":
+    env.policy = HeuristicPolicy()
+elif args.opponent == "rl":
+    env.policy = RLAgent()
+elif args.opponent == "opt":
+    env.policy = OptimizedPolicy()
 
 first_frame = env.render(mode="state")
 height, width, _ = first_frame.shape

@@ -139,6 +139,12 @@ def main() -> None:
         help="Który agent ma być oceniany (domyślnie: heuristic)",
     )
     parser.add_argument(
+        "--opponent",
+        choices=["default", "heuristic", "rl", "opt"],
+        default="default",
+        help="Przeciwnik (domyślnie: default environment policy)",
+    )
+    parser.add_argument(
         "--games",
         type=int,
         default=50,
@@ -161,6 +167,14 @@ def main() -> None:
         agent = OptimizedPolicy()
 
     env = SlimeVolleyEnv()
+
+    if args.opponent == "heuristic":
+        env.policy = HeuristicPolicy()
+    elif args.opponent == "rl":
+        env.policy = RLAgent()
+    elif args.opponent == "opt":
+        env.policy = OptimizedPolicy()
+
     stats = EvalStats()
 
     print(f"Rozgrywam {args.games} meczów (pierwszy do {args.points_to_win} pkt)...\n")

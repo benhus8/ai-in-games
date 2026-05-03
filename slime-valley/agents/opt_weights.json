@@ -1,0 +1,15 @@
+{
+  "defend_x": 14.0,
+  "intercept_x": 10.0,
+  "retreat_x": 18.5,
+  "deep_retreat_x": 18.0,
+  "edge_recenter_x": 15.2,
+  "deep_ball_x": 17.5,
+  "falling_ball_x": 12.5,
+  "falling_ball_vy": 1.5,
+  "general_under_ball_bias": 0.9,
+  "under_ball_bias": 0.6,
+  "high_ball_y": 13.0,
+  "edge_ball_x": 18.2,
+  "_method": "de"
+}
