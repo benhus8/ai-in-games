@@ -107,6 +107,8 @@ def play_match(env, agent, points_to_win: int, max_steps_per_rally: int = 3000) 
         obs = env.reset()
         if hasattr(agent, "reset"):
             agent.reset()
+        if result.rallies >= 20: # prevent infinite loops
+            break
 
     result.duration_s = time.perf_counter() - t_start
     return result

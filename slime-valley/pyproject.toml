@@ -19,4 +19,6 @@ dependencies = [
     "cma>=3.3",
     "scikit-optimize>=0.9",
     "matplotlib>=3.7",
+    "seaborn>=0.13.2",
+    "pandas>=2.3.3",
 ]
