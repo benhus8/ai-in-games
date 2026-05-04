@@ -30,13 +30,24 @@ Zasada działania opiera się na dwóch głównych filarach:
 
 ### 2.2. Optymalizacja (Podejście ewolucyjne - CMA-ES/DE)
 Agent zoptymalizowany nie zmienia praw zaimplementowanej wcześniej heurystyki, lecz dostosowuje i tunuje jej **parametry progowe i wartości graniczne**, które w podstawowej wersji eksperckiej były wpisane "na sztywno".
-Stworzyliśmy wrapper optymalizujący 12 zmiennych ciągłych opisujących zachowanie, w tym m.in.:
-- `defend_x` (optymalna pozycja na korcie w oczekiwaniu na atak, zakres [8.0, 20.0]),
-- `intercept_x` (pozycja przechwytu szybkiej piłki przy siatce, zakres [6.0, 16.0]),
-- `high_ball_y` (próg wysokości, powyżej którego piłkę uznajemy za lob, zakres [8.0, 18.0]),
-- `falling_ball_vy` (od jakiej prędkości pionowej w dół piłkę uznajemy za spadającą na ziemię).
+Użyliśmy algorytmów bezgradientowych z biblioteki `scipy`: strategii ewolucyjnej z adaptacją macierzy kowariancji (CMA-ES) oraz Differential Evolution (DE). Poniższa tabela przedstawia kompletny zestaw 12 parametrów, które podlegały procesowi optymalizacji, wraz z ich zakresami poszukiwań:
 
-Użyliśmy algorytmów bezgradientowych z biblioteki `scipy`: strategii ewolucyjnej z adaptacją macierzy kowariancji (CMA-ES) oraz Differential Evolution (DE) z wielkością populacji ok. 12 osobników. Funkcją fitness ewaluowaną dla każdego z osobników populacji był procent wygranych (`win-rate`) w paczce 10 gier z rzędu w trybie headless, podlegający minimalizacji przez odwrócenie znaku.
+| Nazwa parametru | Opis i znaczenie w kodzie | Zakres (Lower - Upper Bound) |
+| :--- | :--- | :--- |
+| `defend_x` | Idealna pozycja w osi X do obrony standardowej | 8.0 — 20.0 |
+| `intercept_x` | Pozycja X do przechwycenia szybkiej piłki przy siatce | 6.0 — 16.0 |
+| `retreat_x` | Pozycja wycofania, gdy piłka jest u przeciwnika | 14.0 — 24.0 |
+| `deep_retreat_x` | Pozycja wycofania przy bardzo głębokim lobie | 13.0 — 23.0 |
+| `edge_recenter_x` | Pozycja korygująca przy piłkach blisko krawędzi | 12.0 — 20.0 |
+| `deep_ball_x` | Próg X określający, że piłka jest już głęboko na naszej stronie | 13.0 — 22.0 |
+| `falling_ball_x` | Próg X, od którego zaczynamy precyzyjne ustawianie pod piłkę | 8.0 — 18.0 |
+| `falling_ball_vy` | Próg prędkości pionowej uznający piłkę za spadającą | -1.0 — 4.0 |
+| `general_under_ball_bias` | Offset ustawienia się pod "zwykłą" spadającą piłką | 0.0 — 3.0 |
+| `under_ball_bias` | Offset ustawienia się pod "głęboką" piłką | 0.0 — 2.0 |
+| `high_ball_y` | Wysokość piłki definiująca przejście w tryb obrony lobów | 8.0 — 18.0 |
+| `edge_ball_x` | Pozycja X definiująca piłkę lecącą "po linii" (na krawędź) | 14.0 — 22.0 |
+
+Funkcją fitness (minimalizowaną) był odwrócony win-rate (stosunek zwycięstw do rozegranych partii) w serii 10 meczów testowych. Wielkość populacji w każdej generacji wynosiła 12 osobników.
 
 ### 2.3. Uczenie ze wzmocnieniem (RL - PPO)
 Zastosowano algorytm Proximal Policy Optimization (PPO) z biblioteki Stable-Baselines3. Zamiast logiki `if/else`, agent wykorzystywał architekturę głębokiej wielowarstwowej sieci neuronowej (MlpPolicy). 
@@ -49,6 +60,8 @@ Zastosowano algorytm Proximal Policy Optimization (PPO) z biblioteki Stable-Base
 ---
 
 ## 3. Analiza Ilościowa (Twarde dane) i Zjawisko Kamień-Papier-Nożyce
+
+Wszystkie przeprowadzone eksperymenty wykorzystywały **Wbudowanego Bota Twórców (`BaselinePolicy`)** jako jednolity punkt odniesienia (Baseline). Służył on jako przeciwnik treningowy dla bota RL, środowisko testowe dla fitnessu bota optymalizacyjnego oraz ostateczny sędzia weryfikujący skuteczność każdego z podejść.
 
 Rozegrane mecze w paczkach po 50 spotkań pokazały niesamowity dla Sztucznej Inteligencji, wręcz książkowy rozkład sił bazujący na pętli oponowania.
 
